@@ -3,6 +3,9 @@ from openpyxl import load_workbook
 import math
 import csv
 
+# Script by Charles Fox
+# Assesses the Market Potential of a given Adminstrative unit on the basis of the population weighted euclidian distance of other admin units
+# Based on a formula worked out by Therese Norman and Charles Fox, based on (Dichemann, Fay 2004)
 ###### INPUTS #########
 
 #work path: "C:\Users\wb493355\Documents\Excel\Bangaldesh"
