@@ -1,0 +1,1 @@
+Uses ArcMap's Network Analyst tools to run a unique origin-destination matrices, each with a unique segment disrupted, then assigns a value to each segment reflecting the total network effect of the disruption of that particular segment. Used in risk modeling and investment prioritization.  
