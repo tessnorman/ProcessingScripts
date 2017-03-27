@@ -37,5 +37,5 @@ def writeShapefileXLS(workbook, inShp, sheetName, sortField="FID", sortOrder="A"
                 sheet.write(fCount, printIdx, feat.getValue(fieldNames[fIdx]))
                 printIdx = printIdx + 1
         fCount += 1
-    return(workbook)
+    return(sheet)
 

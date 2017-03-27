@@ -1,4 +1,4 @@
-import os, sys, time, math
+import os, sys, time, math, subprocess
 
 '''
 Renames all files in a directory
@@ -50,3 +50,13 @@ def getHistPer(inD):
     for hIdx in range(0,len(inD)):
         inD[hIdx] = inD[hIdx] / tSum
     return(inD)
+    
+
+def generateVRT(inFiles, outVRT, 
+        gdalVRTfunction=r"C:\Python27\ArcGIS10.3\Lib\site-packages\osgeo\gdalbuildvrt.exe", fileList="C:/Temp/VRTList.txt"):
+    vrtFile = open(fileList, 'w')
+    for f in inFiles:
+        vrtFile.write("%s\n" % f)
+    vrtFile.close()
+    subprocess.call("%s -input_file_list %s %s" % (gdalVRTfunction, fileList, outVRT))
+    os.remove(fileList)

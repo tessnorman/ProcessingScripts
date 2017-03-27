@@ -136,6 +136,7 @@ def getVRTTitles(inVRT):
             allTitles.append("%s_%s" % (inT, 'MEAN'))
             allTitles.append("%s_%s" % (inT, 'STD'))
     return(allTitles)
+       
 '''
 Get the unique values from an input raster dataset
 '''    
@@ -324,6 +325,39 @@ def extractFootprints(tempRaster, threshold, outPolygons, selectTerm=' "GRIDCODE
     arcpy.CalculateField_management(outPolygons, "gAreaKM", "!SHAPE.AREA@SQUAREKILOMETERS!", "PYTHON")
     arcpy.Delete_management(tempShp)
 
+def createMapFromColumns(mxd, layerName, outputFolder, columns="all"):
+    '''
+    Create a series of maps, one for each column in the layer defined by layerName
+    mxd - Input mapDocument object
+    layername - name of layer to loop through
+    outputFolder - place to create maps
+
+    columns - array of columns to create map for
+    '''
+    df = arcpy.mapping.ListDataFrames(mxd)[0]
+    #Get refernece to focal layer
+    layers = arcpy.mapping.ListLayers(mxd, '', df)
+    for l in layers:
+        print l.name
+        if l.name == layerName:
+            featureLayer = l
+    #Get list of columns in focal layer
+    print featureLayer
+    fieldNames = [f.name for f in arcpy.ListFields(featureLayer)]
+    if columns != 'all':
+        fieldNames = columns
+    
+    for f in fieldNames:
+        featureLayer.sympology.valueField = f
+        featureLayer.sympology.numClasses = 8
+        featureLayer.symbology.reclassify()
+        mxd.save()
+        time.sleep(1)
+        arcpy.mapping.ExportToPNG(mxd, os.path.join(outputFolder, "%s_%s.png" % (layerName, f)))
+        
+        
+    
+    
 #Create a map from a mxd
 ###mxd - Path to input MXD
 ###outputImage - the output Image to create
@@ -370,9 +404,14 @@ def createMapFromMXD_loop(mxd, outputImage, zoomLayer, layerName, visibility = [
             layers[lIdx].visible = visibility[lIdx]
     #Loop through the features in one of the feature classes
     layers = arcpy.mapping.ListLayers(mxd)
-    for l in layers:
+    for l in layers:        
+        #If there is a staus definition, apply it here
+        if l.name in statusDefinition.keys():
+            l.definitionQuery = statusDefinition[l.name]
+            print ("Definition Query set for %s" % l.name)
         if l.name == zoomLayer:
             loopLyr = l
+            
 
     with arcpy.da.SearchCursor(loopLyr, ["OID@", layerName]) as cur:
         for feat in cur:

@@ -3,11 +3,12 @@
 # Benjamin P Stewart, Aug 2015
 # Purpose: Run zonal statistics (amongst other things) on GHSL data
 ################################################################################
-import arcpy, os, glob, shutil
+import arcpy, os, glob, shutil, xlsxwriter
 import numpy as np
 
 from GOSTRocks.misc import *
 from GOSTRocks.arcpyMisc import *
+from GOSTRocks.xlsxStuff import *
 
 from arcpy.sa import *
 
@@ -215,4 +216,26 @@ def addGHSL(urbanLayer, curMap, ghslFolder, datamaskFolder, lyrSymbology, extent
     
     
     
+def createGHSLexcel (ghslShp, outGHSL):
+    #Write ghsl shape to workbook
+    workbook = xlsxwriter.Workbook(outGHSL)
+    dataSheet = writeShapefileXLS(workbook, ghslShp, "GHSL", 'ExtentName', 'D')
+    #Add total built up columns to sheets
+    for rowIdx in range(1, 20):
+        dataSheet.write(rowIdx - 1, 10, "=sum(I%s:J%s)" % (rowIdx, rowIdx))
+        dataSheet.write(rowIdx - 1, 11, "=sum(H%s:J%s)" % (rowIdx, rowIdx))
+        dataSheet.write(rowIdx - 1, 12, "=sum(G%s:J%s)" % (rowIdx, rowIdx))
     
+    chartSheet = workbook.add_worksheet("Charts")
+    
+    ghslChart = workbook.add_chart({'type':'column'})
+    ghslChart.add_series({'name':'Built before 1975','values':'=GHSL!J$2:$J$10','categories':'=GHSL!C$2:C10'})
+    ghslChart.add_series({'name':'Built before 1990','values':'=GHSL!K$2:$K$10'})
+    ghslChart.add_series({'name':'Built before 2000','values':'=GHSL!L$2:$L$10'})
+    ghslChart.add_series({'name':'Built before 2014','values':'=GHSL!M$2:$M$10'})
+    ghslChart.set_title({'name':'Change in Built-up Area'})
+    ghslChart.set_x_axis({'name':'10 largest cities'})
+    ghslChart.set_y_axis({'name':'Number of Built-up Cells'})
+    ghslChart.set_size({'width':600,'height':600})
+    
+    chartSheet.insert_chart('A1', ghslChart)

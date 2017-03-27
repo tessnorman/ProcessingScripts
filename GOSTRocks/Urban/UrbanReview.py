@@ -6,7 +6,7 @@
 #   2. GHSL
 ###################################################################################################
 import os, sys, csv, arcpy, shutil, xlsxwriter
-sys.path.append(r"C:\Users\wb411133\Box Sync\AAA_BPS\Code\Python\Library")
+sys.path.append(r"C:\Users\wb411133\Box Sync\AAA_BPS\Code\GOST")
 from GOSTRocks.misc import *
 from GOSTRocks.xlsxStuff import *
 from GOSTRocks.arcpyMisc import *
@@ -99,7 +99,7 @@ def calculateUrban(iso3, outputFolder, tempFolder = "C:/Temp",
     popOutputFolder = createFolder(gisOutputFolder, "Population")
 
     NTLoutputSummaryExcel = os.path.join(tableOutputFolder, "%s_NTL_Extent_Stats.xlsx" % iso3)
-    GHSLoutputSummaryExcel = os.path.join(tableOutputFolder, "%s_NTL_Extent_Stats.xlsx" % iso3)
+    GHSLoutputSummaryExcel = os.path.join(tableOutputFolder, "%s_GHSL_Extent_Stats.xlsx" % iso3)
     
     #Copy Official Metadata
     shutil.copyfile(urbanMetricsMetadata, os.path.join(docsOutputFolder, "Urbanization Metrics Overview.docx"))
@@ -139,7 +139,7 @@ def calculateUrban(iso3, outputFolder, tempFolder = "C:/Temp",
             writeDict(results2["Results"], outputAdminPop, results2["Titles"])
         #Summarize GHSL by admin boundaries
         if not os.path.isfile(outputAdminGHSL):
-            #summarizeGHSL_toShp(admin2, ghslFolder, datamaskFolder, ghslOutputFolder, tempFolder, ghslOutline)        
+            summarizeGHSL_toShp(admin2, ghslFolder, datamaskFolder, ghslOutputFolder, tempFolder, ghslOutline)        
             writeShapefileXLS(xlsxwriter.Workbook(outputAdminGHSL), admin2, "GHSL")
                 
     #Calculate Nighttime lights footprints
@@ -164,7 +164,9 @@ def calculateUrban(iso3, outputFolder, tempFolder = "C:/Temp",
         #Post Processing includes creating output tables, maps, and adding metadata to shapefiles
         GOSTRocks.Urban.NighttimeLightsFootprints.FPpostProcessing(docsOutputFolder,mapOutputFolder,ntlFolder,
             NTLoutputSummaryExcel, iso3, finalShape, newCities, thresh, popIdx)    
-    
+        createMapFromMXD_loop(arcpy.mapping.MapDocument(os.path.join(mapOutputFolder, "%s NighttimeLights_Extents.mxd" % iso3)),
+            os.path.join(mapOutputFolder, "NTL_Map.png"), "Master Footprints", "ExtentName",
+            statusDefinition = {'Master Footprints':"NOT \"ExtentName\" = '0'"})
     #Summarize GHSL within the defined urban footprints DEFAULT - Nighttime Lights Extents
     if cGHSL: 
         tPrint("***Processing GHSL for %s" % iso3)
@@ -178,19 +180,19 @@ def calculateUrban(iso3, outputFolder, tempFolder = "C:/Temp",
             arcpy.DeleteField_management(ghslShape, fieldsToDelete)
         else:            
             arcpy.CopyFeatures_management(urbanExtents, ghslShape)
-        inShape = ghslShape
-        #summarizeGHSL_toShp(inShape, ghslFolder, datamaskFolder, ghslOutputFolder, tempFolder, ghslOutline)
+        summarizeGHSL_toShp(ghslShape, ghslFolder, datamaskFolder, ghslOutputFolder, tempFolder, ghslOutline)
+        createGHSLexcel(ghslShape, GHSLoutputSummaryExcel)
                 
         #Map GHSL       
         ghslMap = os.path.join(mapOutputFolder, "GHSL_Maps.mxd")
-        addGHSL(inShape, ghslMap, ghslFolder, datamaskFolder, ghslSymbology, extentsSymbology, ghslOutline)
-        createMapFromMXD(arcpy.mapping.MapDocument(ghslMap), 
-            os.path.join(mapOutputFolder, "GHSL_Map.png"))
-        #Loop through the features in the defined layer, zoom to them and create an output map
-        createMapFromMXD_loop(arcpy.mapping.MapDocument(ghslMap), 
-            os.path.join(mapOutputFolder, "GHSL_Map.png"),
-            "%s_GHSL" % iso3, "ExtentName")
-
+        if not os.path.exists(ghslMap):
+            addGHSL(ghslShape, ghslMap, ghslFolder, datamaskFolder, ghslSymbology, extentsSymbology, ghslOutline)
+            createMapFromMXD(arcpy.mapping.MapDocument(ghslMap), 
+                os.path.join(mapOutputFolder, "GHSL_Map.png"))
+            #Loop through the features in the defined layer, zoom to them and create an output map
+            createMapFromMXD_loop(arcpy.mapping.MapDocument(ghslMap), 
+                os.path.join(mapOutputFolder, "GHSL_Map.png"),
+                "%s_GHSL" % iso3, "ExtentName")
     #Summarize GUF within the defined urban footprints DEFAULT - Nighttime Lights Extents
     if cGUF:
         tPrint("***Processing GUF for %s" % iso3)
@@ -200,7 +202,7 @@ def calculateUrban(iso3, outputFolder, tempFolder = "C:/Temp",
             arcpy.CopyFeatures_management(urbanExtents, gufShape)
                         
         #Identify the intersecting GUF tiles
-        #summarizeGUF_toShp(gufShape, gufTiles, gufFolder, tempFolder)
+        summarizeGUF_toShp(gufShape, gufTiles, gufFolder, tempFolder)
         gufOutMap = os.path.join(mapOutputFolder, "GUF_Maps.mxd")
         #add intersecting GUF tiles to the copied GUF map
         curTiles = selectGHSLtiles(gufShape, gufTiles, 'FileName', False)        
