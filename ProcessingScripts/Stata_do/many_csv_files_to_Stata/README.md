@@ -5,7 +5,7 @@ This do script quickly converts previously created csv files into one Stata file
 
 Name of script: [csv_files_to_stata.do](csv_files_to_stata.do)
 
-Click here for explanation and script for the creation of the [(zonal stats of 18 different crop-suitability-rasters for Ugandan subcounties)](/../../Python/zonal_stats_crop_suitability/README.md).
+Click here for explanation and script for the creation of the [(zonal stats of 18 different crop-suitability-rasters for Ugandan subcounties)](../../Python/zonal_stats_crop_suitability/README.md).
 
 ### Script explanation
 *OBS. Always set the path according to your own directory.*
