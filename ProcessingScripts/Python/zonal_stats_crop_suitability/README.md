@@ -1,11 +1,11 @@
 # Zonal stats of crop suitability rasters
 
 ### Purpose
-This python script uses arcpy to calculate zonal statistics of  several crop suitability rasters for subcounties in Uganda. The script can be modify to calculate crop suitability zonal stats for any number of crops (as rasters files) and any region.
+This python script uses arcpy to calculate zonal statistics of  several crop suitability rasters for subcounties in Uganda. The script can be modified to calculate crop suitability zonal stats for any number of crops (as rasters files) and any region.
 
 The crop suitability rasters were downloaded from the [FAO GAEZ data portal](http://gaez.fao.org/). The script also requires a shapefile for the spatial units of interest. In this case it is Uganda's subcounties.
 
-In this case, 19 different rasters representing the suitability for different crops are placed in the same folder. The raw rasters cover the entire globe. The script first converts a shapefile of Ugandan subcounties into a raster. It then clips all crop rasters to the country of Uganda and finally runs the zonal stats. Lastly, it converts the output to csv files for easy import into stats software.
+In this example, 18 different rasters representing the suitability for different crops are placed in the same folder. The raw rasters cover the entire globe. The script first converts a shapefile of Ugandan subcounties into a raster. It then clips all crop rasters to the country of Uganda and then runs the zonal statistics tool. Lastly, it converts the output tables to csv files for easy import into other stats software.
 
 Name of script: [Zonal_stats_Crop_Suitability.py](Zonal_stats_Crop_Suitability.py)
 
@@ -33,7 +33,7 @@ Define and list the rasters in the folder to make sure they are all there.
 rasters = arcpy.ListRasters()
 print arcpy.ListRasters()
 ```
-Convert the Uganda subcounty shapefile (**NewUnit**) into raster format. (This is the best way to calculate zonal stats when you have tiny spatial features. If a subcounty shapefile is used for the zonal stats, the tool doesn't run the calculations for some of the smaller subcounties). The unique subcounty ID field is 'newUnitID'. Use a relatively small output cell size (0.01) since this will make sure the inclusion of all subcounties in the zonal stats calculations. Place the output raster in desired directory. A new raster called **newUnitRas001** is created and defined as **newUnitRas**.
+Convert the Uganda subcounty shapefile (**NewUnit**) into raster format. (This is the best way to calculate zonal stats when you have tiny spatial features. If a *shapefile* is used for the zonal stats, the tool doesn't run the calculations for some of the smaller subcounties). The unique subcounty ID field is 'newUnitID'. Use a relatively small output cell size (0.01) since this will make sure the inclusion of all subcounties in the zonal stats calculations. Place the output raster in desired directory. A new raster called **newUnitRas001** is created and defined as **newUnitRas**.
 ```python
 NewUnit = r"E:/WBG/FirmLocation/Uganda/UgandaGIS/gis_data/Environment/LessFavoredAgLand/newUnitPop_LFAL_WGS.shp"
 arcpy.FeatureToRaster_conversion(in_features=NewUnit, field="newUnitID", out_raster="E:/WBG/FirmLocation/Uganda/UgandaGIS/gis_data/Environment/LessFavoredAgLand/newUnitRas001", cell_size="0.01")
@@ -45,10 +45,10 @@ Use a Uganda country shapefile to define the clip extent (the subcounty shapefil
 UgandaCountry = "E:/WBG/FirmLocation/Uganda/UgandaGIS/UgandaCountry.shp"
 ```
 The loop below does the following:
-1. Clips all rasters in the working directory folder to Uganda. Since the original raster names are very long (eg. *res02_crav6190l_bana150b_yld.tif* for banana) the output names need to be shorter for arcpy to accept it in later steps. First the extension is taken out of the name, then the name is split into parts at each underscore, then the 3 part ([2]) is used as the crop name since it contains the name of the actual crop (eg. *bana150b*). Define each newly clipped raster with shorter name as **crop**.
-2. Resample the crop rasters so that the cell size matches the uganda subcounty cell size (0.01 dd).
-3. Run zonal stats tool.
-4. Convert the zonal stats output table to csv files.
+1. Clips all rasters in the working directory folder to Uganda. Since the original raster names are very long (eg. *res02_crav6190l_bana150b_yld.tif* for banana) the output names need to be shorter for arcpy to accept it in later steps. First the extension is taken out of the name, then the name is split into parts at each underscore, then the third part (``[2]``) is used as the crop name since it contains the actual name of the crop (eg. *bana150b*). Define each newly clipped raster with shorter name as **crop**.
+2. Resamples the crop rasters so that the cell size matches the Uganda subcounty cell size (0.01 dd). Creates new rasters with '001' added to crop name.
+3. Runs the zonal stats tool. (Only the *MEAN* is calculated, this could be swiched to *ALL* or other statistic as desired.) A new table is created for each crop with 'zonal' added to crop name.
+4. Converts the zonal stats output tables to csv files.
 
 ```python
 for raster in rasters:
