@@ -9,6 +9,8 @@ In this example, 18 different rasters representing the suitability for different
 
 Name of script: [Zonal_stats_Crop_Suitability.py](Zonal_stats_Crop_Suitability.py)
 
+A [do script](/../../Stata_do/many_csv_files_to_Stata/csv_files_to_stata.do) (and [explanation](/../../Stata_do/many_csv_files_to_Stata/README.md)) is used to merge the output into one Stata table.
+
 ### Script explanation
 *OBS. Always set the path according to your own directory.*
 
@@ -72,6 +74,7 @@ Print message when done and check in the Spatial Analyst extension (important if
 print 'Complete'
 arcpy.CheckInExtension("Spatial")
 ```
+A [do script](/../../Stata_do/many_csv_files_to_Stata/csv_files_to_stata.do) (and [explanation](/../../Stata_do/many_csv_files_to_Stata/README.md)) is used to merge the output csv files into one Stata table.
 
 ### Screenshots
 Screenshot of folder containing the raw rasters:
