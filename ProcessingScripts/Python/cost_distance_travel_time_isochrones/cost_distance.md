@@ -69,6 +69,6 @@ arcpy.gp.ContourList_sa(tt_min_ras, "E:/WBG/Djibouti/osm/contour1h.shp", "60")
 
 print "all done"
 ```
-The output should look like this (after symbolizing, etc.)
+The output should look like this (after symbolizing, etc.):
 
-![Cost-Distance isochrones Djibouti](cost_distance_djibouti.jpg)
+![Cost-Distance isochrones Djibouti](cost_distance_djibouti.JPG)
