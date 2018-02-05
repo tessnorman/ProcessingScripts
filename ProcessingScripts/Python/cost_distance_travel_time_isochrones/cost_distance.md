@@ -71,4 +71,4 @@ print "all done"
 ```
 The output should look like this (after symbolizing, etc.)
 
-![alt text](cost_distance_djibouti.jpg?raw=true "Cost-Distance isochrones Djibouti")
+![alt text](cost_distance_djibouti.jpg "Cost-Distance isochrones Djibouti")

@@ -6,4 +6,4 @@ This directory contains two python scripts that uses arcpy to
 
 This analysis uses OSM roads covering Djibouti as the main input. The resulting output is a raster file showing travel times from health centers in Djibouti as in the screenshot below.
 
-![alt text](cost_distance_djibouti.jpg?raw=true "Cost-Distance isochrones Djibouti")
+![alt text](cost_distance_djibouti.jpg "Cost-Distance isochrones Djibouti")
