@@ -6,7 +6,7 @@
 ********************************************************************************
 
 ***set workspace, import data and timeseries settings
-use "E:\WBG\Somalia\WB Market-Violence\Stata\data\data_TNM\master_panel_2018_01_11_wideTS.dta"
+use "E:\WBG\Somalia\WB Market-Violence\Stata\data\data_TNM\mktprices_growth_violence_wideTS.dta"
 cd "E:\WBG\Somalia\WB Market-Violence\tables"
 
 tsset timem
