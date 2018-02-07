@@ -6,7 +6,7 @@
 
 ***set workspace, import data and panel settings
 cd "E:\WBG\Somalia\WB Market-Violence\Stata\data\data_TNM"
-master_panel.dta, clear
+use master_panel.dta, clear
 xtset uniqueID timem
 set more off
 
