@@ -124,14 +124,14 @@ foreach var of varlist `sectors' {
 	gen MPopt`lambdaOptR2_`var'_s'`var'=  POP*exp(-`lOptR2_`var''*distMin)
 }
 
-****calculate travel time index with different set lambdas excluding own
+****calculate MP with different set lambdas excluding own
 gen MP_7 = POP*exp(-0.7*distMin)   if own==0
 gen MP_07= POP*exp(-0.07*distMin)  if own==0
 gen MP_02= POP*exp(-0.02*distMin)  if own==0
 gen MP_01= POP*exp(-0.01*distMin)  if own==0
 gen MP_004= POP*exp(-0.004*distMin) if own==0
 
-****calculate travel time index with different set lambdas including own
+****calculate MP with different set lambdas including own
 gen MPiequalj_7=  POP*exp(-0.7*distMin)
 gen MPiequalj_07= POP*exp(-0.07*distMin)
 gen MPiequalj_02= POP*exp(-0.02*distMin)

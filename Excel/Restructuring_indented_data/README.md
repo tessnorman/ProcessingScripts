@@ -11,9 +11,9 @@ The original excel sheet looks like the screenshot below. The data is organized 
 First I move the data in all columns except for column A to the right, out of the way. Then I select column A, go to the Developer tab, click Macros in the Code section, name the macro 'indented' and click create.  
 ![pic2](macrostep.png)
 
-I add the following code into the code windown and click on the 'run' arrow.  
+I add the following code into the code window and click on the 'run' arrow.  
 ```Macro
-Sub fixdata()
+Sub indented()
 Dim cell as Range
 Dim i as Long
 for each cell in selection
@@ -35,5 +35,5 @@ I also want the district and county cells to be filled down with repeated distri
 Since the filled contents in column B and C are formulas I need to convert the formulas to values by copying them, right-clicking and choosing 'paste to values'. I also add District, County and Subcounty headers.
 ![pic5](step4.png)
 Lastly, I sort the data in alphabetical order by subcounty and I delete all rows that don't have a subcounty, because I'm not interested in data aggregated to the district or county level at this point. I can always calculate that later from the subcounty data. Then I sort the data by district name.
-The final spreadsheet looks like the screenshot below. This is the ideal format for analysis purposes. 
+The final spreadsheet looks like the screenshot below. This is the ideal format for analysis purposes.
 ![pic6](final.png)
