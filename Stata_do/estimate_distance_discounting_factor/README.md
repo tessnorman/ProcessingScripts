@@ -196,12 +196,13 @@ The script generates several outputs:
 
 
 ![Figure 1](graph_R2_foodEmp11.png)
-Figure 1. Example of Output: Lambdas versus R2 for food employment
+**Figure 1. Example of Output: Lambdas versus R2 for food employment**
 
 In the example given here, the optimal lambda for the food-processing industry is 0.015. The graph in Figure 2 shows the optimal lambda for the other industries. This graph was generated in Excel with a little extra work.
 
 ![Figure 2](distance_decay_in_ug_industries.JPG)
-Figure 2. Example of Output: Estimated Distance Decay Functions for Four Industries (Uganda)
+**Figure 2. Example of Output: Estimated Distance Decay Functions for Four Industries (Uganda)**
 
 Yet some extra work can be done to create maps of the market reach of the different sectors. Figure 3 shows the market reach of the farming sector (with a lower lambda) and the manufacturing sector (with a higher lambda). The market reach of the farming sector is more expansive than the market reach of the manufacturing sector. This is probably the case since there aren't that many commercial farms in Uganda with employees and the ones that exist probably trade their products over large distances.  
 ![Figure 3](MPhighandlowlambda.png)
+**Figure 3. Example of Output: Market reach for the farming and the manfucturing sectors in Uganda**
